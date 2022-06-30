@@ -8,11 +8,8 @@ require('dotenv').config()
 const port=process.env.PORT || 4000
 
 app.get('/',(req,res)=>{
-    res.send("Started app successfully")
+    res.send("ToDo Cloud app ")
 })
-
-
-
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.l0msl.mongodb.net/?retryWrites=true&w=majority`;
