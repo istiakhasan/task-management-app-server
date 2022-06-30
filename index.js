@@ -3,7 +3,7 @@ const app=express()
 const cors=require('cors')
 app.use(cors())
 app.use(express.json())
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port=process.env.PORT || 4000
 
 app.get('/',(req,res)=>{
@@ -23,19 +23,47 @@ const run=async()=>{
    await client.connect();
    const todoCollections=client.db('todo').collection('todolist');
     
-   app.post('/addtodo',async(req,res)=>{
+   app.post('/todo',async(req,res)=>{
         const todoContent=req.body 
         const result=await  todoCollections.insertOne(todoContent)
-        console.log(result)
+       
         res.send(result)
    })
-   app.get('/addtodo',async(req,res)=>{
+   app.get('/todo',async(req,res)=>{
        const query={}
        const cursor=todoCollections.find(query)
        const todo=await cursor.toArray()
        res.send(todo)
-       console.log(todo)
+      
    })
+   app.put('/todo/:id', async (req, res) => {
+    const id = req.params.id;
+    console.log(id,"put")
+    const filter={_id:ObjectId(id)}
+    const updateDoc={
+        $set:{status:'completed'}
+    }
+    const result=await todoCollections.updateOne(filter,updateDoc)
+    res.send(result)
+
+  })
+  app.patch('/todo/:id',async(req,res)=>{
+    const id=req.params.id 
+    const updatedoc=req.body.updateContent 
+    const filter={_id:ObjectId(id)}
+    const updateDoc={
+        $set:{todoDescription:updatedoc}
+    }
+    const result=await todoCollections.updateOne(filter,updateDoc)
+    res.send(result)
+  })
+
+  app.delete('/todo/:id',async(req,res)=>{
+   const id=req.params.id 
+   const query={_id:ObjectId(id)}
+   const result=await todoCollections.deleteOne(query)
+   res.send(result)
+  })
 
    }finally{}
 }
