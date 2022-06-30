@@ -2,6 +2,7 @@ const express=require('express')
 const app=express()
 const cors=require('cors')
 app.use(cors())
+app.use(express.json())
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const port=process.env.PORT || 4000
 
@@ -21,7 +22,14 @@ const run=async()=>{
    try{
    await client.connect();
    const todoCollections=client.db('todo').collection('todolist');
-   todoCollections.insertOne({name:"robin"})
+    
+   app.post('/addtodo',async(req,res)=>{
+        const todoContent=req.body 
+        const result=await  todoCollections.insertOne(todoContent)
+        console.log(result)
+        res.send(result)
+   })
+ 
 
    }finally{}
 }
