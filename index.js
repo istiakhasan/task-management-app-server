@@ -29,7 +29,13 @@ const run=async()=>{
         console.log(result)
         res.send(result)
    })
- 
+   app.get('/addtodo',async(req,res)=>{
+       const query={}
+       const cursor=todoCollections.find(query)
+       const todo=await cursor.toArray()
+       res.send(todo)
+       console.log(todo)
+   })
 
    }finally{}
 }
