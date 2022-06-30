@@ -4,6 +4,7 @@ const cors=require('cors')
 app.use(cors())
 app.use(express.json())
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+require('dotenv').config()
 const port=process.env.PORT || 4000
 
 app.get('/',(req,res)=>{
@@ -11,12 +12,10 @@ app.get('/',(req,res)=>{
 })
 
 
-//user:todoadmin
-//passwsord:ULrZLvHNeWv4XX71
 
 
 
-const uri = "mongodb+srv://todoadmin:ULrZLvHNeWv4XX71@cluster0.l0msl.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.l0msl.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const run=async()=>{
    try{
